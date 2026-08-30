@@ -1,29 +1,43 @@
-#include <TFT_eSPI.h> 
 #include <SPI.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_ILI9341.h>
 
-TFT_eSPI tft = TFT_eSPI(); 
+// Mapeamento dos pinos que definimos no seu projeto
+#define TFT_CS   15
+#define TFT_DC   4
+#define TFT_RST  27
+
+// Inicializa a tela usando o barramento VSPI de hardware (velocidade máxima)
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("Iniciando a tela OpenSmart...");
+  Serial.println("Inicializando o display...");
 
+  // Liga a tela
   tft.begin();
-  tft.setRotation(1); 
-  tft.fillScreen(TFT_BLACK);
-
-  // --- Hello World ---
   
-  // Cor do texto (Branco) e cor de fundo do texto (Preto)
-  tft.setTextColor(TFT_WHITE, TFT_BLACK); 
-  // Tamanho da fonte (1 a 7)
+  // Gira a tela para o modo paisagem (tente valores de 0 a 3 se ficar de ponta cabeça)
+  tft.setRotation(1); 
+  
+  // Pinta o fundo de preto
+  tft.fillScreen(ILI9341_BLACK);
+
+  // Configura a primeira linha de texto (Estilo neon)
+  tft.setCursor(30, 80);
+  tft.setTextColor(ILI9341_CYAN); 
   tft.setTextSize(3);
-  // Escreve a mensagem nas coordenadas X=40 e Y=60
-  tft.drawString("Hello World!", 40, 60);
-  // Um charminho extra pro projeto do Baja/Tamagotchi
+  tft.println("Hello World!");
+
+  // Configura a segunda linha de texto
+  tft.setCursor(30, 120);
+  tft.setTextColor(ILI9341_YELLOW);
   tft.setTextSize(2);
-  tft.setTextColor(TFT_GREEN, TFT_BLACK);
-  tft.drawString("ESP32 + R61503", 40, 100);
+  tft.println("VSPI funcionando!");
+  
+  Serial.println("Texto enviado para a tela!");
 }
 
 void loop() {
+  // Para um Hello World estático, não precisamos de nada no loop
 }
